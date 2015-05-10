@@ -5,20 +5,19 @@ namespace UnityStandardAssets.Vehicles.Ball
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] private float mMovePower = 5; // The force added to the player to move it.
+        [SerializeField] private float mMoveSpeed = 5; // The speed that the player moves at
         private Rigidbody2D mRigidbody;
 
 
         private void Start()
         {
             mRigidbody = GetComponent<Rigidbody2D>();
-			mRigidbody.drag = 0.9f;
         }
 
 
         public void Move(Vector2 moveDirection)
         {
-        	mRigidbody.AddForce(moveDirection * mMovePower);
+        	mRigidbody.velocity = (moveDirection * mMoveSpeed);
         }
 
 		private void FixedUpdate()
