@@ -55,7 +55,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 
 				// Wrap angle to [0, 360) and round to nearest 45 degrees
 				angle = MathUtils.WrapAngle(angle, 0.0f,  2.0f * Mathf.PI);
-				angle = MathUtils.RoundAngle(angle, Mathf.PI / 4.0f);					
+				angle = MathUtils.RoundAngleBias(angle, Mathf.PI / 4.0f, 0.5f);					
 				
 				// Get the vector corresponding to the rounded angle
 				float x = Mathf.Cos(angle);
