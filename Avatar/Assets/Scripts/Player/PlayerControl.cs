@@ -17,7 +17,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 		// Set up the reference.
 		player = GetComponent<Player>();
 		moveDirection = new Vector2();
-		inputBuffer = new VectorBuffer(5);
+		inputBuffer = new VectorBuffer(10);
 
 		// Regist this as an event handler
 		foreach(InputProvider provider in inputProviders)
@@ -34,6 +34,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 
 	public void OnInputDown(Vector2 point)
 	{
+		inputBuffer.Reset();
 	}
 	
 	public void OnInputUp(Vector2 point)
@@ -48,14 +49,14 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 
 			case ScreenSide.Left:
 				inputBuffer.PushVector(delta);
-				Vector2 avg = inputBuffer.GetAverage();
+				Vector2 avg = inputBuffer.GetAverage().normalized;
 				
 				// Calculate angle from drag direction
 				float angle = Mathf.Atan2(avg.y, avg.x);
 
 				// Wrap angle to [0, 360) and round to nearest 45 degrees
 				angle = MathUtils.WrapAngle(angle, 0.0f,  2.0f * Mathf.PI);
-				angle = MathUtils.RoundAngleBias(angle, Mathf.PI / 4.0f, 0.5f);					
+				angle = MathUtils.RoundAngleBias(angle, Mathf.PI / 4.0f, 0.3f);					
 				
 				// Get the vector corresponding to the rounded angle
 				float x = Mathf.Cos(angle);
