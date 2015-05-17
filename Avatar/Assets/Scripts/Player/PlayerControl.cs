@@ -9,15 +9,19 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 
 	private Vector2 moveDirection; // Vector tracking current move direction
 	private Player player; // Reference to the player actual character script.
-	private VectorBuffer inputBuffer;
+	private ArrowControl arrow; 
+	private VirtualJoystick leftJoystick;
 	
 
 	private void Awake()
 	{
 		// Set up the reference.
 		player = GetComponent<Player>();
+		arrow = GetComponent<ArrowControl>();
 		moveDirection = new Vector2();
-		inputBuffer = new VectorBuffer(10);
+
+		// Virtual input
+		leftJoystick = new VirtualJoystick();
 
 		// Regist this as an event handler
 		foreach(InputProvider provider in inputProviders)
@@ -34,12 +38,18 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 
 	public void OnInputDown(Vector2 point)
 	{
-		inputBuffer.Reset();
+		ScreenSide side = ScreenUtils.GetSide (point);
+
+		if (side == ScreenSide.Left)
+			leftJoystick.Begin(point);
 	}
 	
 	public void OnInputUp(Vector2 point)
 	{
-		moveDirection.Set (0, 0);
+		ScreenSide side = ScreenUtils.GetSide (point);
+
+		if(side == ScreenSide.Left)
+			moveDirection.Set (0, 0);
 	}
 	
 	public void OnInputDrag(Vector2 point, Vector2 delta)
@@ -48,22 +58,9 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 		switch (side) {
 
 			case ScreenSide.Left:
-				inputBuffer.PushVector(delta);
-				Vector2 avg = inputBuffer.GetAverage().normalized;
-				
-				// Calculate angle from drag direction
-				float angle = Mathf.Atan2(avg.y, avg.x);
-
-				// Wrap angle to [0, 360) and round to nearest 45 degrees
-				angle = MathUtils.WrapAngle(angle, 0.0f,  2.0f * Mathf.PI);
-				angle = MathUtils.RoundAngleBias(angle, Mathf.PI / 4.0f, 0.3f);					
-				
-				// Get the vector corresponding to the rounded angle
-				float x = Mathf.Cos(angle);
-				float y = Mathf.Sin(angle);
-				Vector2 direction = new Vector2(x, y);
-				
-				// Set this as the move direction
+				// Get joystick drag direction
+				Vector2 direction = leftJoystick.Update(point);				
+				arrow.SetDirection(direction);	
 				moveDirection = direction;
 				break;
 
