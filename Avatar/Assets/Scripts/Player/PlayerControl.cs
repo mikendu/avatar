@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class PlayerControl : MonoBehaviour, IInputEventHandler
+public class PlayerControl : MonoBehaviour, IInputEventHandler, IPlayerEventListener
 {
 	public List<InputProvider> inputProviders = new List<InputProvider>(); // Scripts that generates input events
 
@@ -19,6 +19,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 		player = GetComponent<Player>();
 		arrow = GetComponent<ArrowControl>();
 		moveDirection = new Vector2();
+		player.RegisterListener (this);
 
 		// Virtual input
 		leftJoystick = new VirtualJoystick();
@@ -37,6 +38,14 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 	private void Update()
 	{
 		player.Move(moveDirection); 
+	}
+
+
+	// Event handler for when the player object
+	// completes a "dash" action
+	public void OnDashComplete()
+	{
+		leftJoystick.Snap();
 	}
 
 
@@ -83,7 +92,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 			Vector2 direction = leftJoystick.GetDirection();
 			moveDirection = direction;
 		}
-		
+
 		if(rightJoystick.ProcessInput(point, inputIndex))
 		{
 			Vector2 direction = rightJoystick.GetDirection();
@@ -95,7 +104,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler
 	{
 		if(leftJoystick.Reset(inputIndex))
 			moveDirection.Set(0,0);
-		
+	
 		if(rightJoystick.Reset(inputIndex))
 			arrow.Hide();
 	}

@@ -4,15 +4,21 @@ using System.Collections;
 public class VirtualJoystick {
 
 	public float anchorDrift = 0.75f;
+	private Vector2 lastPoint;
 	private Vector2 anchorPoint;
 	private Vector2 currentDirection;
-	private bool active;
 	private int inputIndex;
 
 	public VirtualJoystick(float drift = 0.75f)
 	{
 		anchorDrift = drift;
 		ForceReset();
+	}
+
+	public void Snap()
+	{
+		anchorPoint = lastPoint;
+		currentDirection = Vector2.zero;
 	}
 
 	public void Begin(Vector2 point, int index)
@@ -47,6 +53,7 @@ public class VirtualJoystick {
 		bool tracking = Tracking (index);
 		if(tracking)
 		{
+			lastPoint = point;
 			currentDirection = (point - anchorPoint).normalized;
 			anchorPoint += (currentDirection * anchorDrift);
 		}

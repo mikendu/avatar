@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public class Player : MonoBehaviour
@@ -19,6 +20,13 @@ public class Player : MonoBehaviour
 
 	private float slowTimer = 0.0f;
 	private Vector2 startVelocity;
+	private List<IPlayerEventListener> listeners = new List<IPlayerEventListener>();
+	
+	
+	public void RegisterListener (IPlayerEventListener listener)
+	{
+		listeners.Add(listener);
+	}
 
     private void Start()
     {
@@ -45,6 +53,8 @@ public class Player : MonoBehaviour
 				dashed = 0.0f;
 				dashTime = 0.0f;
 				dashing = false;
+				foreach(IPlayerEventListener listener in listeners)
+					listener.OnDashComplete();
 			}
 		}
 	}

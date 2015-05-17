@@ -5,7 +5,14 @@ public class MouseInputProvider : InputProvider {
 
 	private Vector2 lastMousePosition;
 	private bool mouseDown;
-	
+
+	private void Awake()
+	{
+#if ((UNITY_IPHONE  || UNITY_ANDROID) && !UNITY_EDITOR)
+		this.enabled = false;
+#endif
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
