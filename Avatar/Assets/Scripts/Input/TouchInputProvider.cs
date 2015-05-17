@@ -8,20 +8,20 @@ public class TouchInputProvider : InputProvider {
 		switch(touch.phase)
 		{
 			case TouchPhase.Began:
-				RaiseInputEvent(InputEvent.Down, touch.position, Vector2.zero);
+				RaiseInputEvent(InputEvent.Down, touch.position, Vector2.zero, touch.fingerId);
 				break;
 
 			case TouchPhase.Ended:
-				RaiseInputEvent(InputEvent.Up, touch.position, Vector2.zero);
+				RaiseInputEvent(InputEvent.Up, touch.position, Vector2.zero, touch.fingerId);
 				break;
 
 			case TouchPhase.Moved:
 				RaiseInputEvent(InputEvent.Drag, touch.position, 
-			                	touch.deltaPosition);
+			                	touch.deltaPosition, touch.fingerId);
 				break;
 
 			case TouchPhase.Canceled:
-			RaiseInputEvent(InputEvent.Exit, touch.position, Vector2.zero);
+				RaiseInputEvent(InputEvent.Exit, touch.position, Vector2.zero, touch.fingerId);
 				break;
 
 			default:

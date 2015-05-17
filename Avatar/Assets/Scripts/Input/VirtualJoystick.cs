@@ -1,28 +1,62 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VirtualJoystick : MonoBehaviour {
+public class VirtualJoystick {
 
 	public float anchorDrift = 0.75f;
 	private Vector2 anchorPoint;
+	private Vector2 currentDirection;
 	private bool active;
+	private int inputIndex;
 
 	public VirtualJoystick(float drift = 0.75f)
 	{
 		anchorDrift = drift;
+		ForceReset();
 	}
 
-	public void Begin(Vector2 point)
+	public void Begin(Vector2 point, int index)
 	{
 		anchorPoint = point;
+		inputIndex = index;
+		currentDirection = Vector2.zero;
 	}
 
-	public Vector2 UpdateJoystick(Vector2 point)
+	public bool Tracking(int index)
 	{
-		Vector2 diff = (point - anchorPoint).normalized;
-		anchorPoint += (diff * anchorDrift);
-		return diff;
+		return (inputIndex == index);
 	}
 
+	public bool Reset(int index)
+	{
+		bool tracking = Tracking (index);
+		if(tracking)
+			ForceReset();
+
+		return tracking;
+	}
+
+	public void ForceReset()
+	{
+		inputIndex = -1;
+		currentDirection = Vector2.zero;
+	}
+
+	public bool ProcessInput(Vector2 point, int index)
+	{
+		bool tracking = Tracking (index);
+		if(tracking)
+		{
+			currentDirection = (point - anchorPoint).normalized;
+			anchorPoint += (currentDirection * anchorDrift);
+		}
+
+		return tracking;
+	}
+
+	public Vector2 GetDirection()
+	{
+		return currentDirection;
+	}
 
 }

@@ -10,7 +10,7 @@ public class ArrowControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		spriteRenderer = arrowObject.GetComponent<SpriteRenderer> ();
+		spriteRenderer = arrowObject.GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame

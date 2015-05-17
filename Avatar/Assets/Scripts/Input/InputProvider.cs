@@ -16,7 +16,7 @@ public abstract class InputProvider : MonoBehaviour {
 	}
 
 	protected void RaiseInputEvent(InputEvent eventType, Vector2 point,
-	                        		Vector2 delta)
+	                        		Vector2 delta, int inputIndex = 0)
 	{
 		switch(eventType)
 		{
@@ -24,14 +24,14 @@ public abstract class InputProvider : MonoBehaviour {
 			case InputEvent.Down:
 			
 				foreach(IInputEventHandler handler in InputHandlers)
-					handler.OnInputDown(point);
+					handler.OnInputDown(point, inputIndex);
 				break;
 
 			// Input up
 			case InputEvent.Up:
 			
 				foreach(IInputEventHandler handler in InputHandlers)
-					handler.OnInputUp(point);
+					handler.OnInputUp(point, inputIndex);
 				break;
 
 			// Input dragged
@@ -41,7 +41,7 @@ public abstract class InputProvider : MonoBehaviour {
 				if(delta.magnitude > DragThreshold)
 				{
 					foreach(IInputEventHandler handler in InputHandlers)
-						handler.OnInputDrag(point, delta);
+						handler.OnInputDrag(point, delta, inputIndex);
 				}
 				break;
 
@@ -49,7 +49,7 @@ public abstract class InputProvider : MonoBehaviour {
 			case InputEvent.Exit:
 				
 				foreach(IInputEventHandler handler in InputHandlers)
-					handler.OnInputExit();
+					handler.OnInputExit(inputIndex);
 				break;
 
 			default:
