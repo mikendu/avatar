@@ -3,12 +3,14 @@ using System.Collections;
 
 public class ArrowControl : MonoBehaviour {
 
-	public Transform arrowObject;
+	public GameObject arrowObject;
 	public float arrowDistance;
 
+	private SpriteRenderer spriteRenderer;
+
 	// Use this for initialization
-	void Start () {
-	
+	void Awake () {
+		spriteRenderer = arrowObject.GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
@@ -19,7 +21,8 @@ public class ArrowControl : MonoBehaviour {
 	private void SetRotation(float angle)
 	{
 		float angleDegree = angle * Mathf.Rad2Deg;
-		arrowObject.localRotation = Quaternion.AngleAxis(angleDegree, Vector3.forward);
+		arrowObject.transform.localRotation = 
+			Quaternion.AngleAxis(angleDegree, Vector3.forward);
 	}
 
 	private void SetPosition(Vector2 position)
@@ -45,5 +48,15 @@ public class ArrowControl : MonoBehaviour {
 		SetRotation (angle);
 
 		SetPosition (arrowDistance * direction.normalized);
+	}
+
+	public void Hide()
+	{
+		spriteRenderer.enabled = false;
+	}
+
+	public void Show()
+	{
+		spriteRenderer.enabled = true;
 	}
 }

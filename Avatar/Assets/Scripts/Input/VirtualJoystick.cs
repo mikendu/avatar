@@ -5,6 +5,7 @@ public class VirtualJoystick : MonoBehaviour {
 
 	public float anchorDrift = 0.75f;
 	private Vector2 anchorPoint;
+	private bool active;
 
 	public VirtualJoystick(float drift = 0.75f)
 	{
@@ -16,7 +17,7 @@ public class VirtualJoystick : MonoBehaviour {
 		anchorPoint = point;
 	}
 
-	public Vector2 Update(Vector2 point)
+	public Vector2 UpdateJoystick(Vector2 point)
 	{
 		Vector2 diff = (point - anchorPoint).normalized;
 		anchorPoint += (diff * anchorDrift);
