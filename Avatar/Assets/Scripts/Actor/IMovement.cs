@@ -2,6 +2,12 @@
 
 namespace Assets.Scripts.Actor
 {
+    public enum MovementFactor
+    {
+        InputAvailable,
+        AbilityEngaged
+    }
+    
     /* 
         Interface for componenets that provide movement
         ability for actors in the game. The type of movement
@@ -16,5 +22,7 @@ namespace Assets.Scripts.Actor
            to move with the highest possible velocity. 
            */
         void Move(Vector2 direction, float velocityPercent);
+
+        void NotifyFactor(MovementFactor factor, bool value);
     }
 }

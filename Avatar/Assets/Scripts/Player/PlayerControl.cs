@@ -57,14 +57,17 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler, IPlayerEventList
 			
 			case ScreenSide.Left:
 				leftJoystick.Begin(point, inputIndex);
-                (movement as MonoBehaviour).enabled = true;
+                movement.NotifyFactor(MovementFactor.InputAvailable, true);
                 resetMovement();
 				break;
 				
 			case ScreenSide.Right:
                 rightJoystick.Begin(point, inputIndex);
                 if (weapon != null)
+                {
+                    movement.NotifyFactor(MovementFactor.AbilityEngaged, true);
                     weapon.Begin(point);
+                }
 				break;
 
 			case ScreenSide.None:
@@ -77,7 +80,7 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler, IPlayerEventList
 	{
         if (leftJoystick.Reset(inputIndex))
         {
-            (movement as MonoBehaviour).enabled = false;
+            movement.NotifyFactor(MovementFactor.InputAvailable, false);
             resetMovement();
         }
 
@@ -86,7 +89,10 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler, IPlayerEventList
             Vector2 direction = rightJoystick.GetDirection();
 			rightJoystick.Reset(inputIndex);
             if (weapon != null)
+            {
+                movement.NotifyFactor(MovementFactor.AbilityEngaged, false);
                 weapon.Execute(direction);
+            }
         }
 	}
 	
@@ -116,13 +122,17 @@ public class PlayerControl : MonoBehaviour, IInputEventHandler, IPlayerEventList
 	{
         if (leftJoystick.Reset(inputIndex))
         {
+            movement.NotifyFactor(MovementFactor.InputAvailable, false);
             resetMovement();
         }
 	
 		if(rightJoystick.Reset(inputIndex))
 		{
             if (weapon != null)
+            {
+                movement.NotifyFactor(MovementFactor.AbilityEngaged, false);
                 weapon.Reset();
+            }
         }
 	}
 
