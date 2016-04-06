@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
+/**
+    This class defines an interface and common methods
+    for methods of retrieving user input. User input 
+    can be retrieved from the touch screen, mouse,
+    or keyboard, depending on the platform and system.
+
+    */
 public abstract class InputProvider : MonoBehaviour {
 
 	protected enum InputEvent { Down, Up, Hold, Drag, Exit };

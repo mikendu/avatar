@@ -10,7 +10,7 @@ public class TouchInputProvider : InputProvider {
 #endif
 	}
 
-	private void RaiseTouchEvent(Touch touch)
+	private void HandleTouch(Touch touch)
 	{
 		switch(touch.phase)
 		{
@@ -41,7 +41,7 @@ public class TouchInputProvider : InputProvider {
 	{
 		for(int i = 0; i < Input.touchCount; i++) {
 			Touch touch = Input.GetTouch(i);
-			RaiseTouchEvent(touch);
+            HandleTouch(touch);
 		}
 	}
 }

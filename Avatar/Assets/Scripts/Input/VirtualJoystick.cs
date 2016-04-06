@@ -7,6 +7,7 @@ public class VirtualJoystick {
 	private Vector2 lastPoint;
 	private Vector2 anchorPoint;
 	private Vector2 currentDirection;
+    private float currentMagnitude;
 	private int inputIndex;
 
 	public VirtualJoystick(float drift = 0.75f)
@@ -19,6 +20,7 @@ public class VirtualJoystick {
 	{
 		anchorPoint = lastPoint;
 		currentDirection = Vector2.zero;
+        currentMagnitude = 0;
 	}
 
 	public void Begin(Vector2 point, int index)
@@ -26,7 +28,8 @@ public class VirtualJoystick {
 		anchorPoint = point;
 		inputIndex = index;
 		currentDirection = Vector2.zero;
-	}
+        currentMagnitude = 0;
+    }
 
 	public bool Tracking(int index)
 	{
@@ -46,7 +49,8 @@ public class VirtualJoystick {
 	{
 		inputIndex = -1;
 		currentDirection = Vector2.zero;
-	}
+        currentMagnitude = 0;
+    }
 
 	public bool ProcessInput(Vector2 point, int index)
 	{
@@ -54,12 +58,19 @@ public class VirtualJoystick {
 		if(tracking)
 		{
 			lastPoint = point;
-			currentDirection = (point - anchorPoint).normalized;
+            currentDirection = (point - anchorPoint);
+            currentMagnitude = currentDirection.magnitude;
+            currentDirection = currentDirection.normalized;
 			anchorPoint += (currentDirection * anchorDrift);
 		}
 
 		return tracking;
 	}
+
+    public float GetMagnitude()
+    {
+        return currentMagnitude;
+    }
 
 	public Vector2 GetDirection()
 	{

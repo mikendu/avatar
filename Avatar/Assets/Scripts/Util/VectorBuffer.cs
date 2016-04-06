@@ -24,7 +24,7 @@ public class VectorBuffer {
 	public Vector2 GetAverage()
 	{
 		Vector2 sum = GetSum();
-		return ((1.0f / m_size) * sum);
+		return ((1.0f / m_count) * sum);
 	}
 
 	public Vector2 GetSum()
